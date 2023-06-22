@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template, request, jsonify, redirect, make_response, Response
 from flask_pymongo import PyMongo
+import json
+import csv
 from bson import ObjectId
 
 app = Flask(__name__)
@@ -111,7 +113,45 @@ def delete(product_id):
     return 'Invalid request method.'
 
 
+# Route for downloading product data as CSV or JSON based on format selection
+@app.route('/download_data_csv')
+def download_data_csv():
+        products = mongo.db.products.find()
+        csv_data = "Name,Details,Price,Category,Brand,Quantity\n"  # CSV header
 
+        for product in products:
+            csv_data += f"{product['product_name']},{product['product_details']},{product['product_price']},{product['product_category']},{product['product_brand']},{product['product_quantity']}\n"
+
+        # Create a response with CSV content
+        response = Response(csv_data, mimetype='text/csv')
+        response.headers.set('Content-Disposition', 'attachment', filename='product_data.csv')
+
+        return response
+
+# Route for downloading product data as JSON
+@app.route('/json')
+def json():
+    products = mongo.db.products.find()
+    product_list = []
+
+    for product in products:
+        product_list.append({
+            'Name': product['product_name'],
+            'Details': product['product_details'],
+            'Price': product['product_price'],
+            'Category': product['product_category'],
+            'Brand': product['product_brand'],
+            'Quantity': product['product_quantity']
+        })
+
+    # Convert product_list to JSON using jsonify()
+    json_data = jsonify(product_list)
+
+    # Create a response with JSON content
+    response = Response(json_data, mimetype='application/json')
+    response.headers.set('Content-Disposition', 'attachment', filename='product_data.json')
+
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
