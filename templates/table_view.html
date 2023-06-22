@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Table View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        table {
+            background-color: #fff;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        td {
+            border-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Product Table View</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Details</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.product_details }}</td>
+                    <td>{{ product.product_price }}</td>
+                    <td>{{ product.product_category }}</td>
+                    <td>{{ product.product_brand }}</td>
+                    <td>{{ product.product_quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
