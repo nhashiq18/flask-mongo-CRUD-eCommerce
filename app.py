@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 from flask_pymongo import PyMongo
+from bson import ObjectId
 
 app = Flask(__name__)
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/flaskMongo'  
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/flaskMongo'
 mongo = PyMongo(app)
-
 
 
 @app.route('/')
@@ -35,7 +35,7 @@ def create():
     # Insert data into MongoDB
     mongo.db.products.insert_one(data)
 
-     # Display JavaScript alert after creating the product
+    # Display JavaScript alert after creating the product
     script = """
         <script>
             alert('Product created successfully!');
@@ -44,13 +44,31 @@ def create():
     """
     return script
 
-    # Redirect to the table view
-    return render_template('table_view.html', products=mongo.db.products.find())
-
 
 @app.route('/view')
 def view():
-    return render_template('table_view.html', products=mongo.db.products.find())
+    products = mongo.db.products.find()
+    return render_template('table_view.html', products=products)
+
+@app.route('/delete/<product_id>', methods=['POST', 'DELETE'])
+def delete(product_id):
+    if request.method == 'POST' or request.method == 'DELETE':
+        # Delete product from MongoDB based on product ID
+        deleted_product = mongo.db.products.find_one_and_delete({'_id': ObjectId(product_id)})
+
+        if deleted_product:
+            # Display JavaScript alert after deleting the product
+            script = """
+                <script>
+                    alert('Product deleted successfully!');
+                    window.location.href = '/view';
+                </script>
+            """
+            return script
+
+        return "Product deletion failed."
+
+    return 'Invalid request method.'
 
 
 if __name__ == '__main__':
