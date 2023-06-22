@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Create Product</title>
+    <title>Edit Product</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <style>
         body {
@@ -46,47 +47,48 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h4 class="center-align">Create Product</h4>
-        <form method="POST" action="/create">
+        <h4 class="center-align">Edit Product</h4>
+        <form method="POST" action="/edit/{{ product._id }}">
             <div class="input-field">
-                <input type="text" name="product_name" id="product_name" required>
+                <input type="text" name="product_name" id="product_name" value="{{ product.product_name }}" required>
                 <label for="product_name">Product Name</label>
             </div>
 
             <div class="input-field">
-                <textarea name="product_details" id="product_details" class="materialize-textarea" required></textarea>
+                <textarea name="product_details" id="product_details" class="materialize-textarea" required>{{ product.product_details }}</textarea>
                 <label for="product_details">Product Details</label>
             </div>
 
             <div class="input-field">
-                <input type="number" name="product_price" id="product_price" required>
+                <input type="number" name="product_price" id="product_price" value="{{ product.product_price }}" required>
                 <label for="product_price">Product Price</label>
             </div>
 
             <div class="input-field">
                 <select name="product_category" id="product_category" required>
                     <option value="" disabled selected>Choose a category</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Clothing">Clothing</option>
-                    <option value="Books">Books</option>
+                    <option value="Electronics" {% if product.product_category == "Electronics" %}selected{% endif %}>Electronics</option>
+                    <option value="Clothing" {% if product.product_category == "Clothing" %}selected{% endif %}>Clothing</option>
+                    <option value="Books" {% if product.product_category == "Books" %}selected{% endif %}>Books</option>
                 </select>
                 <label for="product_category">Product Category</label>
             </div>
 
             <div class="input-field">
-                <input type="text" name="product_brand" id="product_brand" required>
+                <input type="text" name="product_brand" id="product_brand" value="{{ product.product_brand }}" required>
                 <label for="product_brand">Product Brand</label>
             </div>
 
             <div class="input-field">
-                <input type="number" name="product_quantity" id="product_quantity" required>
+                <input type="number" name="product_quantity" id="product_quantity" value="{{ product.product_quantity }}" required>
                 <label for="product_quantity">Product Quantity</label>
             </div>
 
             <div class="center-align">
-                <button class="btn waves-effect waves-light" type="submit">Create</button>
+                <button class="btn waves-effect waves-light" type="submit">Update Product</button>
             </div>
         </form>
     </div>
@@ -98,4 +100,5 @@
         });
     </script>
 </body>
+
 </html>
