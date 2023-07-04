@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, make_response, Response
 from flask_pymongo import PyMongo
-import json
+import json as json_module
 import csv
 from bson import ObjectId
 
@@ -128,7 +128,7 @@ def download_data_csv():
 
         return response
 
-# Route for downloading product data as JSON
+# Route for downloading product data as formatted JSON
 @app.route('/json')
 def json():
     products = mongo.db.products.find()
@@ -144,8 +144,8 @@ def json():
             'Quantity': product['product_quantity']
         })
 
-    # Convert product_list to JSON using jsonify()
-    json_data = jsonify(product_list)
+    # Convert product_list to formatted JSON using json_module.dumps()
+    json_data = json_module.dumps(product_list, indent=2)
 
     # Create a response with JSON content
     response = Response(json_data, mimetype='application/json')
